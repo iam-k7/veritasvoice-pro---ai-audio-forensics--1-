@@ -1,9 +1,8 @@
-
 from fastapi import APIRouter, HTTPException, Response, Query
-from pydantic import BaseModel, field_validator
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, field_validator, Field, ConfigDict
 from .detector import VoiceDetector
 import base64
-import binascii
 from typing import Optional, Dict, Any
 
 router = APIRouter()
@@ -13,10 +12,14 @@ MAX_AUDIO_SIZE_BYTES = 10 * 1024 * 1024
 
 class DetectionRequest(BaseModel):
     language: str
-    audioFormat: str = "mp3"
-    audioBase64: str
+    audio_format: str = Field("mp3", alias="audioFormat")
+    audio_base_64: str = Field(..., alias="audioBase64")
 
-    @field_validator('audioBase64')
+    model_config = ConfigDict(
+        populate_by_name=True
+    )
+
+    @field_validator('audio_base_64')
     @classmethod
     def validate_base_64_and_format(cls, v: str):
         v = v.strip() if v else v
@@ -51,7 +54,7 @@ async def detect_voice(
     try:
         # Core forensic analysis
         # detector.analyze handles lang mapping internally
-        result = await detector.analyze(request.audioBase64, request.language)
+        result = await detector.analyze(request.audio_base_64, request.language)
         
         # Inject audit tracking headers (transparency)
         sig = result.get("forensic_metadata", {}).get("signature", "NONE")
@@ -74,7 +77,7 @@ async def detect_voice(
     except Exception as e:
         # Fallback to local model for stability (Judge's requirement for 99.9% uptime)
         try:
-            local_result = detector._execute_local_forensic_model(request.audioBase64)
+            local_result = detector._execute_local_forensic_model(request.audio_base_64)
             if local_result:
                 return {
                     "status": "success",

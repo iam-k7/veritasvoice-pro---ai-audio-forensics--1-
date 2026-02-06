@@ -1,0 +1,40 @@
+--- TEST 1: Request with camelCase (Official GUVI Spec) ---
+Status: 200
+Response: {
+  "status": "success",
+  "language": "English",
+  "classification": "HUMAN",
+  "confidenceScore": 0.8603,
+  "explanation": "Classification verified via local acoustic signature VX-011E1F6E."
+}
+
+--- TEST 2: Request with snake_case (Legacy/Internal) ---
+Status: 200
+Response: {
+  "status": "success",
+  "language": "English",
+  "classification": "HUMAN",
+  "confidenceScore": 0.8603,
+  "explanation": "Classification verified via local acoustic signature VX-011E1F6E."
+}
+
+--- TEST 3: Invalid Base64 (Negative) ---
+Status: 400
+Response: {
+  "status": "error",
+  "message": "Invalid API key or malformed request"
+}
+
+--- TEST 4: Unsupported Language (Negative) ---
+Status: 400
+Response: {
+  "status": "error",
+  "message": "Invalid API key or malformed request"
+}
+
+--- TEST 5: Missing API Key (Negative) ---
+Status: 401
+Response: {
+  "status": "error",
+  "message": "Invalid API key or malformed request"
+}
