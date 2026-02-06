@@ -5,6 +5,14 @@
 .env.production
 auth_secrets.json
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
 # Dependencies
 node_modules/
 jspm_packages/
