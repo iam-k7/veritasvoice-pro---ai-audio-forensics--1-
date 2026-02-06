@@ -1,0 +1,7 @@
+{
+  "name": "VeritasVoice PRO - AI Audio Forensics",
+  "description": "Enterprise-grade acoustic fingerprinting system using a Hybrid DSP-Neural architecture to detect speech synthesis in South Asian languages.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
