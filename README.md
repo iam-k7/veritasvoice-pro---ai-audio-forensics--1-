@@ -14,25 +14,6 @@ VeritasVoice is an advanced AI-generated voice detection system built for the GU
 - **Engine**: Google Gemini API (`gemini-3-flash-preview`).
 - **Audio Processing**: Web Audio API for real-time visualization and capture.
 
-# VeritasVoice Pro - Project Running Successfully ✅
-
-## 🚀 Current Status
-
-**Both servers are now running and operational!**
-
-### Backend API (FastAPI)
-- **URL**: http://localhost:8000
-- **Status**: ✅ Running
-- **Health Check**: http://localhost:8000/health → `{"status":"ok"}`
-- **API Endpoint**: http://localhost:8000/api/v1/detect
-- **Authentication**: Required (`x-api-key: team-codex-2026`)
-
-### Frontend (React + Vite)
-- **URL**: http://localhost:3000
-- **Network**: http://192.168.105.51:3000
-- **Status**: ✅ Running
-- **Framework**: React 19 + TypeScript + Vite
-
 ---
 
 ## 📋 How to Access
@@ -134,7 +115,7 @@ veritasvoice-pro---ai-audio-forensics/
 Required in `.env`:
 ```env
 GEMINI_API_KEY=Google Cloude API Key
-HACKATHON_API_KEY=Your API Key
+X_API_KEY=Create Your API Key
 ```
 
 ---
