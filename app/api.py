@@ -58,7 +58,7 @@ async def detect_voice(
         
         # Inject audit tracking headers (transparency)
         sig = result.get("forensic_metadata", {}).get("signature", "NONE")
-        response.headers["X-Audit-Signature"] = sig
+        response.headers["X-Audit-Signature"] = str(sig)
         
         # MANDATORY GUVI RESPONSE SCHEMA
         return {
@@ -75,9 +75,18 @@ async def detect_voice(
             content={"status": "error", "message": f"Malformed request: {str(ve)}"}
         )
     except Exception as e:
+        print(f"CRITICAL API ERROR: {str(e)}") # LOGGING!
         # Fallback to local model for stability (Judge's requirement for 99.9% uptime)
         try:
-            local_result = detector._execute_local_forensic_model(request.audio_base_64)
+            # Fix fallback execution to match new signature
+            try:
+                b = base64.b64decode(request.audio_base_64)
+            except:
+                b = b""
+            
+            feats = detector._extract_audio_features(b)
+            local_result = detector._execute_local_forensic_model(b, feats)
+            
             if local_result:
                 return {
                     "status": "success",
@@ -86,7 +95,8 @@ async def detect_voice(
                     "confidenceScore": local_result["confidence"],
                     "explanation": "Verified via local acoustic fingerprint (Engine Fallback)."
                 }
-        except:
+        except Exception as fallback_e:
+            print(f"CRITICAL FALLBACK ERROR: {fallback_e}")
             pass
             
         return JSONResponse(

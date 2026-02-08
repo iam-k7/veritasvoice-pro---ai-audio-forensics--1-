@@ -70,6 +70,24 @@ app.add_middleware(
 # All evaluation endpoints are protected by the verify_api_key dependency
 app.include_router(api_router, prefix="/api/v1", dependencies=[Depends(verify_api_key)])
 
+
+# API Information Endpoint (for judges)
+@app.get("/api/v1/info")
+def api_info():
+    """
+    API metadata endpoint for evaluation and documentation.
+    """
+    return {
+        "name": "VeritasVoice Forensic API",
+        "version": "1.0.0",
+        "team": "Team Codex",
+        "supported_languages": ["ta", "en", "hi", "ml", "te"],
+        "supported_formats": ["mp3"],
+        "classification_types": ["AI_GENERATED", "HUMAN"],
+        "confidence_range": [0.0, 1.0],
+        "authentication": "x-api-key header required"
+    }
+
 # Issue 4: Add Health Root Endpoint
 @app.get("/")
 def health_root():
